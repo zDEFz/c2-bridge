@@ -1,0 +1,12 @@
+### /etc/systemd/system/c2-update-avatar.service
+[Unit]
+Description=Update C2 Avatar Service - Watches for changes and updates Avatars from Gravatar
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /root/www/c2.tail.ws/scripts/UpdateC2Avatar.sh
+WorkingDirectory=/root/www/c2.tail.ws/scripts/
+
+[Install]
+WantedBy=multi-user.target
