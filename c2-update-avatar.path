@@ -1,0 +1,9 @@
+### /etc/systemd/system/c2-update-avatar.path
+[Unit]
+Description=Watch for changes in the avatar update path
+
+[Path]
+PathModified=/root/www/c2.tail.ws/public/upload
+
+[Install]
+WantedBy=multi-user.target
