@@ -1,4 +1,286 @@
-<HTML>
-<BODY>
-<meta http-equiv="refresh" content="0;url=https://github.com/zDEFz/c2-patch/archive/refs/heads/stable.zip">
-</HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cultris II Patch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="three.min.js"></script>
+    <script src="vanta.waves.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color:#0490E4;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            z-index: 1; /* Keep the content above background */
+        }
+
+        /* Vanta background setup */
+        .vanta-section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Ensure Vanta stays in the background */
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: white;
+            margin-top: 20px;
+            text-align: center;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            letter-spacing: 1.5px;
+            z-index: 2; /* Ensure h1 is above other content */
+        }
+
+        .video-container {
+            display: flex;
+            justify-content: center;
+            width: auto;
+            margin-top: 20px;
+            padding: 0 10px;
+            z-index: 2; /* Ensure video container stays above background */
+        }
+
+        video {
+            width: auto;
+            max-width: 80vw; /* Ensure the video width doesn't exceed 80% of the viewport */
+            height: auto;
+            max-height: 75vh;
+            border-radius: 10px;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+            
+        }
+
+ 		.button-container a {
+                color: #ffffff;
+                background-color: #005bb5; /* Dark blue for good contrast */
+                text-decoration: none;
+                border: 2px solid #005bb5;
+                padding: 14px 24px;
+                border-radius: 12px; /* Increased for rounder iOS-style look */
+                font-weight: bold;
+                text-align: center;
+                transition: all 0.3s ease;
+                letter-spacing: 0.5px;
+                margin-top:10px;
+                margin-right:10px;
+            }
+        
+            .button-container a:hover {
+                background-color: #0499F2;
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(0, 68, 148, 0.4);
+            }
+            
+        a {
+            display: inline-block;
+            font-size: 1.2em;
+            color: #ffffff;
+            background-color: #66aaff;
+            text-decoration: none;
+            border: 2px solid #66aaff;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        a:hover {
+            background-color: #4d90d1;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(77, 144, 209, 0.4);
+        }
+
+        .changelog {
+            width: 100%;
+            max-width: 900px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+            font-size: 1.1em;
+            color: #e0e0e0;
+            
+            max-height: 50vh;
+            z-index: 2; /* Ensure changelog stays above background */
+        }
+
+        .changelog h2 {
+            font-size: 1.6em;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #66aaff;
+            padding-bottom: 10px;
+        }
+
+        .changelog-entry {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #444;
+        }
+
+        .changelog-entry h3 {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #66aaff;
+            padding-bottom:10px;
+        }
+
+        .changelog-entry ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .changelog-entry li {
+            margin-bottom: 8px;
+        }
+
+        .changelog-entry li::before {
+            content: "• ";
+            color: #66aaff;
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            color: white;
+            font-size: 1em;
+            text-align: center;
+            width: 100%;
+            margin-top: 40px;
+            z-index: 2; /* Ensure footer stays above background */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 50px; /* Adjust for smaller screens */
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                margin-top: 15px;
+            }
+
+            .video-container {
+                margin-top: 10px;
+            }
+
+            video {
+                max-height: 45vh;
+            }
+
+            .button-container {
+                flex-direction: column;
+                gap: 15px;
+                padding: 0 10px;
+            }
+
+            .changelog {
+                max-height: 70vh;
+                font-size: 1.05em;
+            }
+
+            .footer {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="vanta-section"></div>
+
+    <h1>Cultris II Patch</h1>
+
+  <div class="button-container">
+        <a href="https://github.com/zDEFz/c2-patch/archive/refs/heads/stable.zip" download aria-label="Download Cultris II Patch">
+            Download Cultris II
+        </a>
+        <a href="https://discord.gg/pVTfJfXt" target="_blank" rel="noopener noreferrer" aria-label="Join our Discord community">
+            Join our Discord
+        </a>
+    </div>
+    
+    <div class="video-container">
+        <video loading="lazy" controls playsinline poster="thumbnail.png">
+            <source src="c2-setup-w10.mp4" type="video/mp4">
+            <source src="c2-setup-w10.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <section class="changelog">
+        <h2>Changelog</h2>
+        <div class="changelog-entry">
+            <h3>Nov, 2024</h3>
+            <ul>
+                <li>Text-Change: Cultris II => 'Cultris II Patch' ingame</li>
+                <li>Removed instruction video and put it to c2.tail.ws</li>
+                <li>Added user option to toggle enemy sounds</li>
+                <li>Fixed Linux launchers</li>
+            </ul>
+        </div>
+
+        
+        <!-- More changelog entries... -->
+        
+    </section>
+
+    <div class="footer">
+        This patch is a modification project for Cultris II. <br>
+        All original rights are reserved by © 2011-2024 GEWALTIG entertainment. <br>
+        Tetris® is a registered trademark of Tetris Holding, LLC. GEWALTIG entertainment is not affiliated with Tetris Holding, LLC in any way.
+    </div>
+
+    <script>
+        window.onload = () => {
+            setVanta();  // Initialize Vanta on window load
+        };
+
+        var setVanta = () => {
+            if (window.VANTA) {
+                console.log("Initializing Vanta...");
+                window.VANTA.WAVES({
+                    el: ".vanta-section",
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 200.00,
+                    minWidth: 200.00,
+                    scale: 1.00,
+                    scaleMobile: 1.00,
+                    shininess: 0.00,
+                    waveHeight: 23.50,
+                    waveSpeed: 0.90,
+                    zoom: 0.80
+                });
+            } else {
+                console.error("Vanta initialization failed!");
+            }
+        };
+    </script>
+</body>
+</html>
