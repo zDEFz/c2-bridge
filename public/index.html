@@ -325,48 +325,64 @@ let initialLoad = true;  // Flag to check if it's the initial load
 function loadPlayerData() {
     const proxyUrl = 'https://api.allorigins.win/get?url=';
     const targetUrl = 'https://gewaltig.net/api/liveinfo';
+    const playersContainer = document.getElementById('players-container');
 
     fetch(proxyUrl + encodeURIComponent(targetUrl))
         .then(response => response.json())
         .then(data => {
             const playersData = JSON.parse(data.contents);
-            const playersContainer = document.getElementById('players-container');
-
-            // Clear existing player cards each time data is loaded
-            playersContainer.innerHTML = '';
+            const newPlayerMap = new Map();
 
             playersData.players.forEach(player => {
-                const playerCard = document.createElement('div');
-                playerCard.classList.add('player-card');
+                const playerId = player.name; // or another unique identifier
+                newPlayerMap.set(playerId, player);
 
-                // Avatar image
-                const avatar = document.createElement('img');
-                avatar.src = `https://c2.tail.ws/avatars/${player.avatarhash}.png`;
-                avatar.onerror = () => avatar.src = 'https://c2.tail.ws/avatars/anon.png';
-                playerCard.appendChild(avatar);
+                let playerCard = document.getElementById(`player-${playerId}`);
 
-                // Player name
-                const playerName = document.createElement('div');
-                playerName.classList.add('player-name');
-                playerName.textContent = player.name;
-                playerCard.appendChild(playerName);
+                if (!playerCard) {
+                    // Create a new player card if it doesn't exist
+                    playerCard = document.createElement('div');
+                    playerCard.classList.add('player-card');
+                    playerCard.id = `player-${playerId}`;
 
-                // Country
-                const playerCountry = document.createElement('div');
-                playerCountry.classList.add('player-country');
-                playerCountry.textContent = player.country;
-                playerCard.appendChild(playerCountry);
+                    // Avatar image
+                    const avatar = document.createElement('img');
+                    avatar.src = `https://c2.tail.ws/avatars/${player.avatarhash}.png`;
+                    avatar.onerror = () => avatar.src = 'https://c2.tail.ws/avatars/anon.png';
+                    avatar.classList.add('player-avatar');
+                    playerCard.appendChild(avatar);
 
-                // Player score
-                const playerScore = document.createElement('div');
-                playerScore.classList.add('player-score');
-                playerScore.textContent = `Score: ${player.currentscore}`;
-                playerCard.appendChild(playerScore);
+                    // Player name
+                    const playerName = document.createElement('div');
+                    playerName.classList.add('player-name');
+                    playerCard.appendChild(playerName);
 
-                // Player status, room mode, and challenge name
-                const playerStatus = document.createElement('div');
-                playerStatus.classList.add('player-status');
+                    // Country
+                    const playerCountry = document.createElement('div');
+                    playerCountry.classList.add('player-country');
+                    playerCard.appendChild(playerCountry);
 
+                    // Player score
+                    const playerScore = document.createElement('div');
+                    playerScore.classList.add('player-score');
+                    playerCard.appendChild(playerScore);
+
+                    // Player status, room mode, and challenge name
+                    const playerStatus = document.createElement('div');
+                    playerStatus.classList.add('player-status');
+                    playerCard.appendChild(playerStatus);
+
+                    playersContainer.appendChild(playerCard);
+                }
+
+                // Update player card contents
+                playerCard.querySelector('.player-avatar').src = `https://c2.tail.ws/avatars/${player.avatarhash}.png`;
+                playerCard.querySelector('.player-name').textContent = player.name;
+                playerCard.querySelector('.player-country').textContent = player.country;
+                playerCard.querySelector('.player-score').textContent = `Score: ${player.currentscore}`;
+
+                // Update player status
+                const playerStatus = playerCard.querySelector('.player-status');
                 const room = playersData.rooms.find(room => room.id === player.room);
                 let statusText = player.status.charAt(0).toUpperCase() + player.status.slice(1);
 
@@ -379,10 +395,15 @@ function loadPlayerData() {
                 }
 
                 playerStatus.textContent = statusText;
-                playerStatus.classList.add(player.status === 'afk' ? 'afk' : 'active');
-                playerCard.appendChild(playerStatus);
+                playerStatus.className = `player-status ${player.status === 'afk' ? 'afk' : 'active'}`;
+            });
 
-                playersContainer.appendChild(playerCard);
+            // Remove players not in the new data
+            Array.from(playersContainer.children).forEach(playerCard => {
+                const playerId = playerCard.id.replace('player-', '');
+                if (!newPlayerMap.has(playerId)) {
+                    playersContainer.removeChild(playerCard);
+                }
             });
         })
         .catch(error => {
@@ -390,44 +411,9 @@ function loadPlayerData() {
         });
 }
 
+// Call loadPlayerData periodically
+setInterval(loadPlayerData, 5000); // reload every 5 seconds
+
+
     </script>
 </body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
