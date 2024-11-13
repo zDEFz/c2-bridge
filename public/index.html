@@ -1,365 +1,405 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cultris II Patch</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <script src="three.min.js"></script>
-    <script src="vanta.waves.min.js"></script>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
 
-      body {
-        background-color: #0490E4;
-        font-family: 'Roboto', sans-serif;
-        color: white;
-        display: flex;
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cultris II Patch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <script src="three.min.js"></script>
+  <script src="vanta.waves.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #0490E4;
+      font-family: 'Roboto', sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      z-index: 1;
+    }
+
+    .vanta-section {
+      position: fixed;
+      /* Use fixed instead of absolute to ensure it's always in the background */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: white;
+      margin-top: 20px;
+      text-align: center;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      letter-spacing: 1.5px;
+      z-index: 2;
+    }
+
+    .video-container {
+      display: flex;
+      justify-content: center;
+      width: auto;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      padding: 0 10px;
+      z-index: 2;
+    }
+
+    video {
+      width: auto;
+      max-width: 80vw;
+      height: auto;
+      max-height: 75vh;
+      border-radius: 10px;
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .button-container a {
+      color: #ffffff;
+      background-color: #005bb5;
+      text-decoration: none;
+      border: 2px solid #005bb5;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: bold;
+      text-align: center;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+
+    .button-container a:hover {
+      background-color: #0499F2;
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 68, 148, 0.4);
+    }
+
+    a {
+      display: inline-block;
+      font-size: 1.2em;
+      color: #ffffff;
+      background-color: #66aaff;
+      text-decoration: none;
+      border: 2px solid #66aaff;
+      padding: 12px 24px;
+      border-radius: 5px;
+      font-weight: bold;
+      text-align: center;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+
+    a:hover {
+      background-color: #4d90d1;
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(77, 144, 209, 0.4);
+    }
+
+    .changelog {
+      width: 100%;
+      max-width: 900px;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      font-size: 1.1em;
+      color: #e0e0e0;
+      max-height: 50vh;
+      z-index: 2;
+    }
+
+    .changelog h2 {
+      font-size: 1.6em;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #66aaff;
+      padding-bottom: 10px;
+    }
+
+    .changelog-entry {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #444;
+    }
+
+    .changelog-entry h3 {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #66aaff;
+      padding-bottom: 10px;
+    }
+
+    .changelog-entry ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .changelog-entry li {
+      margin-bottom: 8px;
+    }
+
+    .changelog-entry li::before {
+      content: "• ";
+      color: #66aaff;
+    }
+
+    .footer {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 10px 20px;
+      color: white;
+      font-size: 1em;
+      text-align: center;
+      width: 100%;
+      margin-top: 40px;
+      z-index: 2;
+    }
+
+    .player-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .player-card {
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      width: 220px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .player-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .player-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .player-name {
+      font-size: 18px;
+      font-weight: 500;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .player-score {
+      color: orange;
+    }
+
+    .player-status {
+      font-size: 15px;
+      color: #aaa;
+    }
+
+    .player-country {
+      color: #7ab8d3;
+    }
+
+    .active {
+      color: #2ecc71;
+    }
+
+    .afk {
+      color: #e74c3c;
+    }
+
+    @media (max-width: 768px) {
+      .player-container {
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
-        min-height: 100vh;
-        overflow-x: hidden;
-        position: relative;
-        z-index: 1;
-      }
-
-      .vanta-section {
-        position: fixed;
-        /* Use fixed instead of absolute to ensure it's always in the background */
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-      }
-
-      h1 {
-        font-size: 3rem;
-        color: white;
-        margin-top: 20px;
-        text-align: center;
-        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-        letter-spacing: 1.5px;
-        z-index: 2;
-      }
-
-      .video-container {
-        display: flex;
-        justify-content: center;
-        width: auto;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        padding: 0 10px;
-        z-index: 2;
-      }
-
-      video {
-        width: auto;
-        max-width: 80vw;
-        height: auto;
-        max-height: 75vh;
-        border-radius: 10px;
-        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
-      }
-
-      .button-container a {
-        color: #ffffff;
-        background-color: #005bb5;
-        text-decoration: none;
-        border: 2px solid #005bb5;
-        padding: 14px 24px;
-        border-radius: 12px;
-        font-weight: bold;
-        text-align: center;
-        transition: all 0.3s ease;
-        letter-spacing: 0.5px;
-        margin-top: 10px;
-        margin-right: 10px;
-      }
-
-      .button-container a:hover {
-        background-color: #0499F2;
-        transform: scale(1.05);
-        box-shadow: 0 6px 20px rgba(0, 68, 148, 0.4);
-      }
-
-      a {
-        display: inline-block;
-        font-size: 1.2em;
-        color: #ffffff;
-        background-color: #66aaff;
-        text-decoration: none;
-        border: 2px solid #66aaff;
-        padding: 12px 24px;
-        border-radius: 5px;
-        font-weight: bold;
-        text-align: center;
-        transition: all 0.3s ease;
-        letter-spacing: 0.5px;
-      }
-
-      a:hover {
-        background-color: #4d90d1;
-        transform: scale(1.05);
-        box-shadow: 0 6px 20px rgba(77, 144, 209, 0.4);
-      }
-
-      .changelog {
-        width: 100%;
-        max-width: 900px;
-        background-color: rgba(0, 0, 0, 0.7);
-        padding: 20px;
-        margin-top: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-        font-size: 1.1em;
-        color: #e0e0e0;
-        max-height: 50vh;
-        z-index: 2;
-      }
-
-      .changelog h2 {
-        font-size: 1.6em;
-        color: #fff;
-        text-align: center;
-        margin-bottom: 20px;
-        border-bottom: 2px solid #66aaff;
-        padding-bottom: 10px;
-      }
-
-      .changelog-entry {
-        margin-bottom: 16px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid #444;
-      }
-
-      .changelog-entry h3 {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: #66aaff;
-        padding-bottom: 10px;
-      }
-
-      .changelog-entry ul {
-        list-style-type: none;
-        padding-left: 0;
-      }
-
-      .changelog-entry li {
-        margin-bottom: 8px;
-      }
-
-      .changelog-entry li::before {
-        content: "• ";
-        color: #66aaff;
-      }
-
-      .footer {
-        background-color: rgba(0, 0, 0, 0.7);
-        padding: 10px 20px;
-        color: white;
-        font-size: 1em;
-        text-align: center;
-        width: 100%;
-        margin-top: 40px;
-        z-index: 2;
-      }
-
-      .player-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        gap: 15px;
-        margin-top: 20px;
       }
 
       .player-card {
-        background-color: rgba(0, 0, 0, 0.7);
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        padding: 15px;
-        width: 220px;
-        text-align: center;
-        transition: all 0.3s ease;
+        width: 90%;
+        max-width: 250px;
       }
+    }
+  </style>
+</head>
 
-      .player-card img {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 10px;
-      }
-
-      .player-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      }
-
-      .player-name {
-        font-size: 18px;
-        font-weight: 500;
-        color: #333;
-        margin-bottom: 8px;
-      }
-
-      .player-score {
-        color: #666;
-      }
-
-      .player-status {
-        font-size: 15px;
-        color: #aaa;
-      }
-
-      .player-country {
-        color: #7ab8d3;
-      }
-
-      .active {
-        color: #2ecc71;
-      }
-
-      .afk {
-        color: #e74c3c;
-      }
-
-      @media (max-width: 768px) {
-        .player-container {
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .player-card {
-          width: 90%;
-          max-width: 250px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="vanta-section"></div>
-    <h1>Cultris II Patch</h1>
-    <div class="button-container">
-      <a href="https://github.com/zDEFz/c2-patch/archive/refs/heads/stable.zip" download aria-label="Download Cultris II Patch"> Download Cultris II </a>
-      <a href="https://discord.gg/pVTfJfXt" target="_blank" rel="noopener noreferrer" aria-label="Join our Discord community"> Join our Discord </a>
+<body>
+  <div class="vanta-section"></div>
+  <h1>Cultris II Patch</h1>
+  <div class="button-container">
+    <a href="https://github.com/zDEFz/c2-patch/archive/refs/heads/stable.zip" download
+      aria-label="Download Cultris II Patch"> Download Cultris II </a>
+    <a href="https://discord.gg/pVTfJfXt" target="_blank" rel="noopener noreferrer"
+      aria-label="Join our Discord community"> Join our Discord </a>
+  </div>
+  <div class="video-container">
+    <video controls playsinline poster="thumbnail.png">
+      <source src="c2-setup-w10.mp4" type="video/mp4">
+      <source src="c2-setup-w10.webm" type="video/webm"> Your browser does not support the video tag.
+    </video>
+  </div>
+  <!-- Live Player Data Section -->
+  <h2>Live Player Data</h2>
+  <div id="players-container" class="player-container"></div>
+  <!-- Changelog Section -->
+  <section class="changelog">
+    <h2>Changelog</h2>
+    <div class="changelog-entry">
+      <h3>Nov, 2024</h3>
+      <ul>
+        <li>ColorPicker: Enforce English locale for background-color</li>
+        <li>Text-Change: Cultris II => 'Cultris II Patch' ingame</li>
+        <li>Removed instruction video and put it to c2.tail.ws</li>
+        <li>Added user option to toggle enemy sounds</li>
+        <li>Fixed Linux launchers</li>
+      </ul>
     </div>
-    <div class="video-container">
-      <video controls playsinline poster="thumbnail.png">
-        <source src="c2-setup-w10.mp4" type="video/mp4">
-        <source src="c2-setup-w10.webm" type="video/webm"> Your browser does not support the video tag.
-      </video>
-    </div>
-    <!-- Live Player Data Section -->
-    <h2>Live Player Data</h2>
-    <div id="players-container" class="player-container"></div>
-    <!-- Changelog Section -->
-    <section class="changelog">
-      <h2>Changelog</h2>
-      <div class="changelog-entry">
-        <h3>Nov, 2024</h3>
-        <ul>
-          <li>ColorPicker: Enforce English locale for background-color</li>
-          <li>Text-Change: Cultris II => 'Cultris II Patch' ingame</li>
-          <li>Removed instruction video and put it to c2.tail.ws</li>
-          <li>Added user option to toggle enemy sounds</li>
-          <li>Fixed Linux launchers</li>
-        </ul>
-      </div>
-      <!-- More changelog entries... -->
-    </section>
-    <div class="footer"> This patch is a modification project for Cultris II. <br> All original rights are reserved by © 2011-2024 GEWALTIG entertainment. <br> Tetris® is a registered trademark of Tetris Holding, LLC. GEWALTIG entertainment is not affiliated with Tetris Holding, LLC in any way. </div>
-    <script>
-      window.onload = () => {
-        setVanta(); // Initialize Vanta on window load
-        loadPlayerData(); // Load live player data
-        startPollingPlayerData();
-      };
-      var setVanta = () => {
-        if (window.VANTA) {
-          window.VANTA.WAVES({
-            el: ".vanta-section",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            shininess: 0.00,
-            waveHeight: 23.50,
-            waveSpeed: 0.90,
-            zoom: 0.80
-          });
-        } else {
-          console.error("Vanta initialization failed!");
-        }
-      };
-      let initialLoad = true; // Flag to check if it's the initial load
-      function loadPlayerData() {
-        const proxyUrl = 'https://api.allorigins.win/get?url=';
-        const targetUrl = 'https://gewaltig.net/api/liveinfo';
-        const playersContainer = document.getElementById('players-container');
-        fetch(proxyUrl + encodeURIComponent(targetUrl)).then(response => response.json()).then(data => {
-          const playersData = JSON.parse(data.contents);
+    <!-- More changelog entries... -->
+  </section>
+  <div class="footer"> This patch is a modification project for Cultris II. <br> All original rights are reserved by ©
+    2011-2024 GEWALTIG entertainment. <br> Tetris® is a registered trademark of Tetris Holding, LLC. GEWALTIG
+    entertainment is not affiliated with Tetris Holding, LLC in any way. </div>
+  <script>
+    window.onload = () => {
+      setVanta(); // Initialize Vanta on window load
+      loadPlayerData(); // Load live player data
+    };
+    var setVanta = () => {
+      if (window.VANTA) {
+        window.VANTA.WAVES({
+          el: ".vanta-section",
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: 1.00,
+          scaleMobile: 1.00,
+          shininess: 0.00,
+          waveHeight: 23.50,
+          waveSpeed: 0.90,
+          zoom: 0.80
+        });
+      } else {
+        console.error("Vanta initialization failed!");
+      }
+    };
+    let initialLoad = true; // Flag to check if it's the initial load
+    function loadPlayerData() {
+      const proxyUrl = 'https://corsproxy.io/?';
+      const targetUrl = 'https://gewaltig.net/api/liveinfo';
+      const playersContainer = document.getElementById('players-container');
+
+      fetch(proxyUrl + targetUrl)
+        .then(response => {
+          // Log the raw response body for debugging
+          console.log("Response received:", response);
+
+          if (!response.ok) {
+            // Handle non-200 responses (errors)
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json(); // Parse the response directly as JSON
+        })
+        .then(data => {
+          // Log the parsed JSON data
+          console.log("Parsed response data:", data);
+
+          // Check if `players` is present in the response
+          if (!data.players) {
+            console.error('Players data not found!');
+            return;
+          }
+
+          const playersData = data.players;
           const newPlayerMap = new Map();
-          playersData.players.forEach(player => {
+
+          playersData.forEach(player => {
             const playerId = player.name; // or another unique identifier
             newPlayerMap.set(playerId, player);
+
             let playerCard = document.getElementById(`player-${playerId}`);
             if (!playerCard) {
               // Create a new player card if it doesn't exist
               playerCard = document.createElement('div');
               playerCard.classList.add('player-card');
               playerCard.id = `player-${playerId}`;
+
               // Avatar image
               const avatar = document.createElement('img');
               avatar.src = `https://c2.tail.ws/avatars/${player.avatarhash}.png`;
               avatar.onerror = () => avatar.src = 'https://c2.tail.ws/avatars/anon.png';
               avatar.classList.add('player-avatar');
               playerCard.appendChild(avatar);
+
               // Player name
               const playerName = document.createElement('div');
               playerName.classList.add('player-name');
               playerCard.appendChild(playerName);
+
               // Country
               const playerCountry = document.createElement('div');
               playerCountry.classList.add('player-country');
               playerCard.appendChild(playerCountry);
+
               // Player score
               const playerScore = document.createElement('div');
               playerScore.classList.add('player-score');
               playerCard.appendChild(playerScore);
+
               // Player status, room mode, and challenge name
               const playerStatus = document.createElement('div');
               playerStatus.classList.add('player-status');
               playerCard.appendChild(playerStatus);
+
               playersContainer.appendChild(playerCard);
             }
+
             // Update player card contents
             playerCard.querySelector('.player-avatar').src = `https://c2.tail.ws/avatars/${player.avatarhash}.png`;
             playerCard.querySelector('.player-name').textContent = player.name;
             playerCard.querySelector('.player-country').textContent = player.country;
             playerCard.querySelector('.player-score').textContent = `Score: ${player.currentscore}`;
+
             // Update player status
             const playerStatus = playerCard.querySelector('.player-status');
-            const room = playersData.rooms.find(room => room.id === player.room);
+            const room = data.rooms.find(room => room.id === player.room);
             let statusText = player.status.charAt(0).toUpperCase() + player.status.slice(1);
+
             if (room) {
               statusText += ` - ${room.mode}`;
             }
+
             if (player.challenge) {
               statusText += ` - ${player.challenge}`;
             }
+
             playerStatus.textContent = statusText;
             playerStatus.className = `player-status ${player.status === 'afk' ? 'afk' : 'active'}`;
           });
+
           // Remove players not in the new data
           Array.from(playersContainer.children).forEach(playerCard => {
             const playerId = playerCard.id.replace('player-', '');
@@ -367,11 +407,14 @@
               playersContainer.removeChild(playerCard);
             }
           });
-        }).catch(error => {
+        })
+        .catch(error => {
+          // Log any errors related to fetch or parsing
           console.error('Error loading player data:', error);
         });
-      }
-      // Call loadPlayerData periodically
-      setInterval(loadPlayerData, 5000); // reload every 5 seconds
-    </script>
-  </body>
+    }
+
+    // Call loadPlayerData periodically
+    setInterval(loadPlayerData, 5000); // reload every 5 seconds
+  </script>
+</body>
