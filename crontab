@@ -1,0 +1,2 @@
+0 3 * * * /usr/sbin/logrotate /etc/logrotate.conf
+0 0 * * * journalctl --vacuum-time=1day
