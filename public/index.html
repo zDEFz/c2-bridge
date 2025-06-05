@@ -6,8 +6,8 @@
     <title>Cultris II Patch</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <script src="three.min.js"></script>
-    <script src="vanta.waves.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.waves.min.js"></script>
     <style>
       * {
         margin: 0;
@@ -31,7 +31,6 @@
 
       .vanta-section {
         position: fixed;
-        /* Use fixed instead of absolute to ensure it's always in the background */
         top: 0;
         left: 0;
         width: 100%;
@@ -68,6 +67,14 @@
         box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
       }
 
+      .button-container {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
       .button-container a {
         color: #ffffff;
         background-color: #005bb5;
@@ -79,35 +86,34 @@
         text-align: center;
         transition: all 0.3s ease;
         letter-spacing: 0.5px;
-        margin-top: 10px;
-        margin-right: 10px;
+        display: inline-block;
+        font-size: 1.1em;
       }
 
-      .button-container a:hover {
+      .button-container a:hover,
+      .button-container a:focus {
         background-color: #0499F2;
         transform: scale(1.05);
         box-shadow: 0 6px 20px rgba(0, 68, 148, 0.4);
+        outline: 2px solid #ffffff;
+        outline-offset: 2px;
       }
 
-      a {
-        display: inline-block;
-        font-size: 1.2em;
-        color: #ffffff;
-        background-color: #66aaff;
+      /* Skip link for keyboard navigation */
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 6px;
+        background: #000;
+        color: #fff;
+        padding: 8px;
         text-decoration: none;
-        border: 2px solid #66aaff;
-        padding: 12px 24px;
-        border-radius: 5px;
-        font-weight: bold;
-        text-align: center;
-        transition: all 0.3s ease;
-        letter-spacing: 0.5px;
+        z-index: 1000;
+        border-radius: 4px;
       }
 
-      a:hover {
-        background-color: #4d90d1;
-        transform: scale(1.05);
-        box-shadow: 0 6px 20px rgba(77, 144, 209, 0.4);
+      .skip-link:focus {
+        top: 6px;
       }
 
       /* Main changelog container */
@@ -126,6 +132,7 @@
         scrollbar-width: thin;
         width: 100%;
         z-index: 2;
+        tabindex: 0;
       }
 
       /* Changelog entries */
@@ -225,6 +232,16 @@
         .changelog-entry h3 {
           font-size: 1.1em;
         }
+
+        .button-container {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .button-container a {
+          width: 80%;
+          max-width: 300px;
+        }
       }
 
       .footer {
@@ -254,6 +271,14 @@
         width: 220px;
         text-align: center;
         transition: all 0.3s ease;
+        border: 2px solid transparent;
+        tabindex: 0;
+      }
+
+      .player-card:focus {
+        outline: 2px solid #66aaff;
+        outline-offset: 2px;
+        border-color: #66aaff;
       }
 
       .player-card img {
@@ -308,66 +333,129 @@
           max-width: 250px;
         }
       }
+
+      /* Focus styles for better keyboard navigation */
+      a:focus,
+      button:focus,
+      video:focus {
+        outline: 2px solid #66aaff;
+        outline-offset: 2px;
+      }
+
+      /* Screen reader only content */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
     </style>
   </head>
   <body>
-    <div class="vanta-section"></div>
-    <h1>Cultris II Patch</h1>
-    <div class="button-container">
-      <a href="https://github.com/zDEFz/c2-patch/archive/refs/heads/stable.zip" download aria-label="Download Cultris II Patch"> Download Cultris II </a>
-      <a href="https://discord.gg/pVTfJfXt" target="_blank" rel="noopener noreferrer" aria-label="Join our Discord community"> Join our Discord </a>
-    </div>
-    <div class="video-container">
-      <video controls playsinline poster="thumbnail.png">
-        <source src="c2-setup-w10.mp4" type="video/mp4">
-        <source src="c2-setup-w10.webm" type="video/webm"> Your browser does not support the video tag.
-      </video>
-    </div>
-    <!-- Live Player Data Section -->
-    <h2>Live Player Data</h2>
-    <div id="players-container" class="player-container"></div>
-    <!-- Changelog Section -->
-    <section class="changelog">
-      <h2>Changelog</h2>
-      <div class="changelog-entry">
-        <h3>May, 2025</h3>
-        <ul>
-        	<li> Fix animtoggle state</li>
-        </ul>
-        <h3>April, 2025</h3>
-        <ul>
-         <li> F9 as a shortcut for "/cmd replay last" </li>
-         <li> Add games replay storage feature </li>
-        </ul>
-        <h3>February, 2025</h3>
-        <ul>
-          <li>Permanent Ignore fixup:in CD_33.class => is_guest => method94 </li>
-          <li>Chore: Restructure ./src folder</li>
-          <li>Resolve case-sensitivity issues in class references</li>
-          <li>Add permanent ignore</li>
-        </ul>
-        <h3>Nov, 2024</h3>
-        <ul>
-          <li>ColorPicker: Use of more common color identification and ability to change team colors and names</li>
-          <li>Launchers: Windows - Auto locate java.exe</li>
-          <li>c2settings: up range of FPS slider to 2000</li>
-          <li>Local-Play: Bot amount=1000</li>
-          <li>animtoggle: read only once; setup: update JDK on Linux and Windows</li>
-          <li>ColorPicker: Enforce English locale for background-color</li>
-          <li>Text-Change: Cultris II => 'Cultris II Patch' ingame</li>
-          <li>Removed instruction video and put it to c2.tail.ws</li>
-          <li>Added user option to toggle enemy sounds</li>
-          <li>Fixed Linux launchers</li>
-        </ul>
-      </div>
-      <!-- More changelog entries... -->
-    </section>
-    <div class="footer"> This patch is a modification project for Cultris II. <br> All original rights are reserved by © 2011-2025 GEWALTIG entertainment. <br> Tetris® is a registered trademark of Tetris Holding, LLC. GEWALTIG entertainment is not affiliated with Tetris Holding, LLC in any way. </div>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <div class="vanta-section" aria-hidden="true"></div>
+    
+    <header>
+      <h1>Cultris II Patch</h1>
+      <nav class="button-container" role="navigation" aria-label="Main navigation">
+        <a href="https://github.com/zDEFz/c2-patch/archive/refs/heads/stable.zip" 
+           download 
+           aria-label="Download Cultris II Patch">
+          Download Cultris II
+        </a>
+        <a href="https://discord.gg/pVTfJfXt" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           aria-label="Join our Discord community">
+          Join our Discord
+        </a>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <section class="video-container" aria-labelledby="setup-video">
+        <h2 id="setup-video" class="sr-only">Setup Video</h2>
+        <video controls 
+               playsinline 
+               poster="thumbnail.png"
+               aria-label="Cultris II setup tutorial video">
+          <source src="c2-setup-w10.mp4" type="video/mp4">
+          <source src="c2-setup-w10.webm" type="video/webm">
+          <p>Your browser does not support the video tag. Please update your browser or try a different one.</p>
+        </video>
+      </section>
+
+      <!-- Live Player Data Section -->
+      <section aria-labelledby="live-players">
+        <h2 id="live-players">Live Player Data</h2>
+        <div id="players-container" 
+             class="player-container" 
+             role="region" 
+             aria-live="polite" 
+             aria-label="Live player information, updates every 10 seconds">
+          <!-- Player cards will be inserted here by JavaScript -->
+        </div>
+      </section>
+
+      <!-- Changelog Section -->
+      <section class="changelog" 
+               aria-labelledby="changelog-title" 
+               role="region" 
+               tabindex="0"
+               aria-label="Changelog - scrollable content">
+        <h2 id="changelog-title">Changelog</h2>
+        <div class="changelog-entry">
+          <h3>May, 2025</h3>
+          <ul role="list">
+            <li>Fix animtoggle state</li>
+          </ul>
+          <h3>April, 2025</h3>
+          <ul role="list">
+            <li>F9 as a shortcut for "/cmd replay last"</li>
+            <li>Add games replay storage feature</li>
+          </ul>
+          <h3>February, 2025</h3>
+          <ul role="list">
+            <li>Permanent Ignore fixup: in CD_33.class => is_guest => method94</li>
+            <li>Chore: Restructure ./src folder</li>
+            <li>Resolve case-sensitivity issues in class references</li>
+            <li>Add permanent ignore</li>
+          </ul>
+          <h3>November, 2024</h3>
+          <ul role="list">
+            <li>ColorPicker: Use of more common color identification and ability to change team colors and names</li>
+            <li>Launchers: Windows - Auto locate java.exe</li>
+            <li>c2settings: up range of FPS slider to 2000</li>
+            <li>Local-Play: Bot amount=1000</li>
+            <li>animtoggle: read only once; setup: update JDK on Linux and Windows</li>
+            <li>ColorPicker: Enforce English locale for background-color</li>
+            <li>Text-Change: Cultris II => 'Cultris II Patch' ingame</li>
+            <li>Removed instruction video and put it to c2.tail.ws</li>
+            <li>Added user option to toggle enemy sounds</li>
+            <li>Fixed Linux launchers</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      This patch is a modification project for Cultris II.<br>
+      All original rights are reserved by © 2011-2025 GEWALTIG entertainment.<br>
+      Tetris® is a registered trademark of Tetris Holding, LLC. GEWALTIG entertainment is not affiliated with Tetris Holding, LLC in any way.
+    </footer>
+
     <script>
       window.onload = () => {
-        setVanta(); // Initialize Vanta on window load
-        loadPlayerData(); // Load live player data
+        setVanta();
+        loadPlayerData();
       };
+
       var setVanta = () => {
         if (window.VANTA) {
           window.VANTA.WAVES({
@@ -388,77 +476,129 @@
           console.error("Vanta initialization failed!");
         }
       };
-      let initialLoad = true; // Flag to check if it's the initial load
+
+      let initialLoad = true;
+
       function loadPlayerData() {
         const proxyUrl = 'https://api.allorigins.win/get?url=';
         const targetUrl = 'https://gewaltig.net/api/liveinfo';
         const playersContainer = document.getElementById('players-container');
-        fetch(proxyUrl + encodeURIComponent(targetUrl)).then(response => response.json()).then(data => {
-          const playersData = JSON.parse(data.contents);
-          const newPlayerMap = new Map();
-          playersData.players.forEach(player => {
-            const playerId = player.name; // or another unique identifier
-            newPlayerMap.set(playerId, player);
-            let playerCard = document.getElementById(`player-${playerId}`);
-            if (!playerCard) {
-              // Create a new player card if it doesn't exist
-              playerCard = document.createElement('div');
-              playerCard.classList.add('player-card');
-              playerCard.id = `player-${playerId}`;
-              // Avatar image
-              const avatar = document.createElement('img');
+
+        fetch(proxyUrl + encodeURIComponent(targetUrl))
+          .then(response => response.json())
+          .then(data => {
+            const playersData = JSON.parse(data.contents);
+            const newPlayerMap = new Map();
+
+            playersData.players.forEach(player => {
+              const playerId = player.name;
+              newPlayerMap.set(playerId, player);
+              let playerCard = document.getElementById(`player-${playerId}`);
+
+              if (!playerCard) {
+                // Create a new player card if it doesn't exist
+                playerCard = document.createElement('div');
+                playerCard.classList.add('player-card');
+                playerCard.id = `player-${playerId}`;
+                playerCard.setAttribute('tabindex', '0');
+                playerCard.setAttribute('role', 'article');
+                playerCard.setAttribute('aria-label', `Player information for ${player.name}`);
+
+                // Avatar image
+                const avatar = document.createElement('img');
+                avatar.src = `https://c2.tail.ws/avatars/${player.avatarhash}.png`;
+                avatar.onerror = () => avatar.src = 'https://c2.tail.ws/avatars/anon.png';
+                avatar.classList.add('player-avatar');
+                avatar.alt = `Avatar for ${player.name}`;
+                playerCard.appendChild(avatar);
+
+                // Player name
+                const playerName = document.createElement('div');
+                playerName.classList.add('player-name');
+                playerName.setAttribute('aria-label', 'Player name');
+                playerCard.appendChild(playerName);
+
+                // Country
+                const playerCountry = document.createElement('div');
+                playerCountry.classList.add('player-country');
+                playerCountry.setAttribute('aria-label', 'Player country');
+                playerCard.appendChild(playerCountry);
+
+                // Player score
+                const playerScore = document.createElement('div');
+                playerScore.classList.add('player-score');
+                playerScore.setAttribute('aria-label', 'Current score');
+                playerCard.appendChild(playerScore);
+
+                // Player status, room mode, and challenge name
+                const playerStatus = document.createElement('div');
+                playerStatus.classList.add('player-status');
+                playerStatus.setAttribute('aria-label', 'Player status and game mode');
+                playerCard.appendChild(playerStatus);
+
+                playersContainer.appendChild(playerCard);
+              }
+
+              // Update player card contents
+              const avatar = playerCard.querySelector('.player-avatar');
               avatar.src = `https://c2.tail.ws/avatars/${player.avatarhash}.png`;
-              avatar.onerror = () => avatar.src = 'https://c2.tail.ws/avatars/anon.png';
-              avatar.classList.add('player-avatar');
-              playerCard.appendChild(avatar);
-              // Player name
-              const playerName = document.createElement('div');
-              playerName.classList.add('player-name');
-              playerCard.appendChild(playerName);
-              // Country
-              const playerCountry = document.createElement('div');
-              playerCountry.classList.add('player-country');
-              playerCard.appendChild(playerCountry);
-              // Player score
-              const playerScore = document.createElement('div');
-              playerScore.classList.add('player-score');
-              playerCard.appendChild(playerScore);
-              // Player status, room mode, and challenge name
-              const playerStatus = document.createElement('div');
-              playerStatus.classList.add('player-status');
-              playerCard.appendChild(playerStatus);
-              playersContainer.appendChild(playerCard);
+              avatar.alt = `Avatar for ${player.name}`;
+              
+              playerCard.querySelector('.player-name').textContent = player.name;
+              playerCard.querySelector('.player-country').textContent = player.country;
+              playerCard.querySelector('.player-score').textContent = `Score: ${player.currentscore}`;
+
+              // Update player status
+              const playerStatus = playerCard.querySelector('.player-status');
+              const room = playersData.rooms.find(room => room.id === player.room);
+              let statusText = player.status.charAt(0).toUpperCase() + player.status.slice(1);
+              
+              if (room) {
+                statusText += ` - ${room.mode}`;
+              }
+              if (player.challenge) {
+                statusText += ` - ${player.challenge}`;
+              }
+              
+              playerStatus.textContent = statusText;
+              playerStatus.className = `player-status ${player.status === 'afk' ? 'afk' : 'active'}`;
+              
+              // Update aria-label for the card
+              playerCard.setAttribute('aria-label', 
+                `Player ${player.name} from ${player.country}, Score: ${player.currentscore}, Status: ${statusText}`
+              );
+            });
+
+            // Remove players not in the new data
+            Array.from(playersContainer.children).forEach(playerCard => {
+              const playerId = playerCard.id.replace('player-', '');
+              if (!newPlayerMap.has(playerId)) {
+                playersContainer.removeChild(playerCard);
+              }
+            });
+
+            // Announce update to screen readers
+            if (!initialLoad) {
+              const announcement = document.createElement('div');
+              announcement.className = 'sr-only';
+              announcement.setAttribute('aria-live', 'polite');
+              announcement.textContent = `Player data updated. ${playersData.players.length} players online.`;
+              document.body.appendChild(announcement);
+              setTimeout(() => document.body.removeChild(announcement), 1000);
             }
-            // Update player card contents
-            playerCard.querySelector('.player-avatar').src = `https://c2.tail.ws/avatars/${player.avatarhash}.png`;
-            playerCard.querySelector('.player-name').textContent = player.name;
-            playerCard.querySelector('.player-country').textContent = player.country;
-            playerCard.querySelector('.player-score').textContent = `Score: ${player.currentscore}`;
-            // Update player status
-            const playerStatus = playerCard.querySelector('.player-status');
-            const room = playersData.rooms.find(room => room.id === player.room);
-            let statusText = player.status.charAt(0).toUpperCase() + player.status.slice(1);
-            if (room) {
-              statusText += ` - ${room.mode}`;
+            initialLoad = false;
+          })
+          .catch(error => {
+            console.error('Error loading player data:', error);
+            const playersContainer = document.getElementById('players-container');
+            if (playersContainer.children.length === 0) {
+              playersContainer.innerHTML = '<p>Unable to load player data at this time.</p>';
             }
-            if (player.challenge) {
-              statusText += ` - ${player.challenge}`;
-            }
-            playerStatus.textContent = statusText;
-            playerStatus.className = `player-status ${player.status === 'afk' ? 'afk' : 'active'}`;
           });
-          // Remove players not in the new data
-          Array.from(playersContainer.children).forEach(playerCard => {
-            const playerId = playerCard.id.replace('player-', '');
-            if (!newPlayerMap.has(playerId)) {
-              playersContainer.removeChild(playerCard);
-            }
-          });
-        }).catch(error => {
-          console.error('Error loading player data:', error);
-        });
       }
+
       // Call loadPlayerData periodically
-      setInterval(loadPlayerData, 10000); // reload every 10 seconds
+      setInterval(loadPlayerData, 10000);
     </script>
   </body>
+</html>
